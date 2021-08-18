@@ -61,7 +61,7 @@ extension UIImageView {
 }
 extension UIView {
  func viewSetings(view: UIView) {
-    view.backgroundColor = UIColor(red: 0.75, green: 0.83, blue: 0.95, alpha: 1.00)
+    view.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
     view.layer.cornerRadius = 15.0
     view.clipsToBounds = true
 }

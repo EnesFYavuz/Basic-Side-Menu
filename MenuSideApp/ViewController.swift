@@ -11,6 +11,7 @@ import SideMenu
 class ViewController: UIViewController {
     var menu:SideMenuNavigationController?
    
+    @IBOutlet weak var menuButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -19,7 +20,7 @@ class ViewController: UIViewController {
         SideMenuManager.default.leftMenuNavigationController = menu
         SideMenuManager.default.addPanGestureToPresent(toView: self.view)
         
-        
+       
     }
     func makeSettings() -> SideMenuSettings{
     var settings = SideMenuSettings()
