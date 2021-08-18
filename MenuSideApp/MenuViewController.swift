@@ -8,8 +8,8 @@
 import UIKit
 
 class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSource{
-   var menuItems = ["HomePage","Page1","Page2","Page3"]
-
+    var page=[cellModel]()
+    @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userJobLabel: UILabel!
@@ -19,21 +19,39 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        userView.viewSetings(view: userView)
-        userImage.image = UIImage(named: "batman")
-        userImage.maskCircle(anyImage: userImage.image!)
+        appendSideMenuItem()
+        mainImageView.makeBlurImage(targetImageView: mainImageView, imageName: "batman")
+        userImage.maskCircle(anyImage: userImage, imageName: "batman")
         userNameLabel.text = "Batman"
         userJobLabel.text = "Revenger"
      
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems.count
+        return page.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MenuTableViewCell
-        cell.NameLabel.text = menuItems[indexPath.row]
+        cell.pageName.text = page[indexPath.row].pageName
+        cell.pageImage.image = UIImage(named: page[indexPath.row].pageimageName!) 
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch page[indexPath.row].pageName {
+        case "Home":
+            self.dismiss(animated: true, completion: nil)
+        case "Settings":
+            performSegue(withIdentifier: "settingsVc", sender: nil)
+        case "Logout":
+            Alert().exitAlert(title: "Warning", message: "Do you want to exit the application?", viewController: self)
+        default: break
+        }
+    
+    }
+    func appendSideMenuItem(){
+        page.append(cellModel(pageimageName: "home", pageName: "Home"))
+        page.append(cellModel(pageimageName: "settings", pageName: "Settings"))
+        page.append(cellModel(pageimageName: "logout", pageName: "Logout"))
     }
     
     
@@ -50,20 +68,21 @@ class MenuViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 
 }
 extension UIImageView {
- func maskCircle(anyImage: UIImage) {
-
-
+    func maskCircle(anyImage: UIImageView,imageName:String) {
+    anyImage.image = UIImage(named: imageName)
     self.contentMode = UIView.ContentMode.scaleAspectFill
     self.layer.cornerRadius = self.frame.size.width/2
     self.layer.masksToBounds = false
     self.clipsToBounds = true
 }
-}
-extension UIView {
- func viewSetings(view: UIView) {
-    view.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-    view.layer.cornerRadius = 15.0
-    view.clipsToBounds = true
-}
+    func makeBlurImage(targetImageView:UIImageView?,imageName:String)
+        {
+        targetImageView?.image = UIImage(named: imageName)
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.alpha = 0.4
+        blurEffectView.frame = targetImageView!.frame
+        targetImageView?.addSubview(blurEffectView)
+        }
 }
 
